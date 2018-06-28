@@ -33,6 +33,12 @@ def results(request, user=None):
     return render(request, 'docfinder/results.html', context=context)
 
 
+def all_doctors(request):
+    doctor_list = Doctor.objects.all()
+    context = {'doctor_list1': doctor_list[:int(len(doctor_list) / 2)], 'doctor_list2': doctor_list[int(len(doctor_list) / 2):], 'user': None}
+    return render(request, 'docfinder/results.html', context=context)
+
+
 def filter_doctors_by_user_preferences(preferences):
     matching_doctors = []
     for preference in preferences:

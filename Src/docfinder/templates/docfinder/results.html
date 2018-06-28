@@ -11,8 +11,10 @@
         <img src="{% static 'docfinder/cura.png' %}"/>
     </div>
     <hr class="top-nav-break">
+    {% if user %}
+        <h2>Here is a list of potential doctors for you, {{ user.first_name }}:</h2>
+    {% endif %}
     {% if doctor_list1 %}
-    <h2>Here is a list of potential doctors for you, {{ user.first_name }}:</h2>
     <div class="row">
         <div class="left-col">
             <ul class="doctor-list">
