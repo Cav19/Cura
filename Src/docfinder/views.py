@@ -23,34 +23,36 @@ def submit(request):
 def results(request, user=None):
     if not user:
         return render(request, 'docfinder/results.html', context={'doctor_list': Doctor.objects.all()})
-    all_doctors = Doctor.objects.all()
-    filtered_doctors = filter_doctors_by_user_preferences(all_doctors, Preference.objects.filter(user=user))
+    filtered_doctors = filter_doctors_by_user_preferences(Preference.objects.filter(user=user))
     for doctor in filtered_doctors:
         doctor.phone_number = number_format_frontend(doctor.phone_number)
     context = {'doctor_list1': filtered_doctors[:int(len(filtered_doctors) / 2)], 'doctor_list2': filtered_doctors[int(len(filtered_doctors) / 2):], 'user': user}
     return render(request, 'docfinder/results.html', context=context)
 
 
-def filter_doctors_by_user_preferences(all_doctors, preferences):
+def filter_doctors_by_user_preferences(preferences):
+    matching_doctors = []
     for preference in preferences:
         if preference.key == "preferredDoctorGender":
-            all_doctors = get_doctors_of_gender(preference.value, all_doctors)
+            matching_gender_doctors = get_doctors_of_gender(preference.value)
+            matching_doctors += list(set(matching_gender_doctors) - set(matching_doctors))
         if preference.key == "specialty":
-            all_doctors = get_doctors_with_specialty(preference.value, all_doctors)
-    return all_doctors
+            doctors_with_specialty = get_doctors_with_specialty(preference.value)
+            matching_doctors += list(set(doctors_with_specialty) - set(matching_doctors))
+    return matching_doctors
 
 
-def get_doctors_with_specialty(specialty_id, doctors):
+def get_doctors_with_specialty(specialty_id):
     specialty_object = Specialty.objects.get(id=specialty_id)
     doctors_with_specialty = []
-    for doctor in doctors:
+    for doctor in Doctor.objects.all():
         if doctor in specialty_object.doctor_set.all():
             doctors_with_specialty.append(doctor)
     return doctors_with_specialty
 
 
-def get_doctors_of_gender(gender, doctors):
-    return doctors.filter(gender=gender)
+def get_doctors_of_gender(gender):
+    return Doctor.objects.filter(gender=gender)
 
 
 def import_data(request):
