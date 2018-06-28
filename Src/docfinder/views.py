@@ -26,7 +26,10 @@ def results(request, user=None):
     filtered_doctors = filter_doctors_by_user_preferences(Preference.objects.filter(user=user))
     for doctor in filtered_doctors:
         doctor.phone_number = number_format_frontend(doctor.phone_number)
-    context = {'doctor_list1': filtered_doctors[:int(len(filtered_doctors) / 2)], 'doctor_list2': filtered_doctors[int(len(filtered_doctors) / 2):], 'user': user}
+    if len(filtered_doctors) == 1:
+        context = {'doctor_list1': filtered_doctors, 'doctor_list2': [], 'user': user}
+    else:
+        context = {'doctor_list1': filtered_doctors[:int(len(filtered_doctors) / 2)], 'doctor_list2': filtered_doctors[int(len(filtered_doctors) / 2):], 'user': user}
     return render(request, 'docfinder/results.html', context=context)
 
 
