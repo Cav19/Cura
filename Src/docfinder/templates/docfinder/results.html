@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'docfinder/style.css' %}"/>
+<head>
+    <meta charset="UTF-8">
+    <title>Your Cura Results</title>
+</head>
+<body>
+    <div class="title">
+        <img src="{% static 'docfinder/cura.png' %}"/>
+    </div>
+    <hr class="top-nav-break">
+    {% if doctor_list1 %}
+    <h2>Here is a list of potential doctors for you, {{ user.first_name }}:</h2>
+    <div class="row">
+        <div class="left-col">
+            <ul class="doctor-list">
+                {% for doctor in doctor_list1 %}
+                <li class="doctor_info">
+                    <p class="doctor-name">{{ doctor.first_name }} {{ doctor.last_name }}{% if doctor.title %}, {{ doctor.title }} {% endif %}</p>
+                    <p class="doctor-address">Address: {{ doctor.address }}</p>
+                    <p class="doctor-phone">Phone: {{ doctor.phone_number }}</p>
+                    <p class="doctor-specialties">Specialties: {% for specialty in doctor.specialties.all %} {{ specialty.name|title }}{% if not forloop.last %},{% endif %}{% endfor %}</p>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="right-col">
+            <ul class="doctor-list">
+                {% for doctor in doctor_list2 %}
+                <li class="doctor_info">
+                    <p class="doctor-name">{{ doctor.first_name }} {{ doctor.last_name }}{% if doctor.title %}, {{ doctor.title }} {% endif %}</p>
+                    <p class="doctor-address">Address: {{ doctor.address }}</p>
+                    <p class="doctor-phone">Phone: {{ doctor.phone_number }}</p>
+                    <p class="doctor-specialties">Specialties: {% for specialty in doctor.specialties.all %} {{ specialty.name|title }}{% if not forloop.last %},{% endif %}{% endfor %}</p>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% else %}
+    <p class="sad-result">No doctors meet your criteria at this time.</p>
+    {% endif %}
+</body>
+</html>

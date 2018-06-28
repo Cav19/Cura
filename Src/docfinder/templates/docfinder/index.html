@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'docfinder/style.css' %}"/>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <title>Cura</title>
+</head>
+<body>
+    <div class="title">
+        <img src="{% static 'docfinder/cura.png' %}"/>
+    </div>
+    <hr class="top-nav-break">
+    <form action="{% url 'submit' %}" method="post">
+        {% csrf_token %}
+        <h2>First, some information about yourself: </h2>
+        <div class="form-group col-md-4">
+            <label for="firstNameInput">First Name</label>
+            <input type="text" class="form-control" id="firstNameInput" placeholder="Enter Your First Name" name="firstName">
+        </div>
+        <div class="form-group col-md-4">
+            <label for="lastNameInput">Last Name</label>
+            <input type="text" class="form-control" id="lastNameInput" placeholder="Enter Your Last Name" name="lastName">
+        </div>
+        <div class="form-group col-md-4">
+            <label for="emailInput">Email Address</label>
+            <input type="text" class="form-control" id="emailInput" placeholder="Enter Your Email Address" name="email">
+        </div>
+        <div class="form-group col-md-4">
+            <label for="ageInput">Your Age</label>
+            <input type="text" class="form-control" id="ageInput" placeholder="Enter Your Age" name="age">
+        </div>
+        <div class="form-group col-md-4">
+            <label>Your Gender: </label>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="userGender" id="male" value="M">
+                <label class="form-check-label" for="male">Male</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="userGender" id="female" value="F">
+                <label class="form-check-label" for="female">Female</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="userGender" id="other" value="O">
+                <label class="form-check-label" for="other">Other</label>
+            </div>
+        </div>
+        <hr class="mid-page-break">
+        <h2>Next, some information about the doctor you want: </h2>
+        <div class="form-group col-md-4">
+            <label for="preferredSpecialties">Please select your preferred specialties:</label>
+            <select multiple class="form-control" id="preferredSpecialties" name="specialties">
+                {% for specialty in all_specialties %}
+                    <option value="{{specialty.id}}">{{ specialty.name|title }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group col-md-4">
+            <label for="preferredDoctorGender">Select your preferred doctor gender: </label>
+            <select class="form-control" id="preferredDoctorGender" name="preferredDoctorGender">
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+                <option value="O">Other</option>
+            </select>
+        </div>
+        <div class="form-group col-md-4">
+            <label for="preferredDoctorAge">Please select your preferred doctor age range:</label>
+            <select class="form-control" id="preferredDoctorAge" name="preferredDoctorAge">
+                <option value="1">20-30</option>
+                <option value="2">30-40</option>
+                <option value="3">40-50</option>
+                <option value="4">50-60</option>
+                <option value="5">60+</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary col-md-2">Find a Doctor!</button>
+    </form>
+</body>
+</html>
